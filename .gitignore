@@ -58,3 +58,23 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Rider Settings
+.idea
+
+# Assets
+Assets/Doozy
+Assets/Doozy.meta
+Assets/Editor
+Assets/Editor.meta
+Assets/Gizmos
+Assets/Gizmos.meta
+Assets/MPUIKit
+Assets/MPUIKit.meta
+Assets/NCMB
+Assets/NCMB.meta
+Assets/Plugins
+Assets/Plugins.meta
+Assets/unityroom
+Assets/unityroom.meta
+Assets/VContainer
+Assets/VContainer.meta
