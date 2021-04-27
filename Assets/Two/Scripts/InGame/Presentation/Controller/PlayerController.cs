@@ -1,4 +1,5 @@
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Presentation.View.Interface;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -28,6 +29,10 @@ namespace Two.InGame.Presentation.Controller
             var tickAsObservable = this.UpdateAsObservable();
             var fixedTickAsObservable = this.FixedUpdateAsObservable();
 
+            var hitBallAsObservable = this.OnCollisionEnterAsObservable()
+                .Select(other => other.gameObject.GetComponent<IBallView>())
+                .Where(other => other != null);
+
             // 移動方向の入力
             var moveVector = Vector3.zero;
             tickAsObservable
@@ -50,11 +55,23 @@ namespace Two.InGame.Presentation.Controller
                 .Subscribe(_ => _rotationUseCase.Rotate(_inputProvider.mousePosition))
                 .AddTo(this);
 
+            hitBallAsObservable
+                .Subscribe(other =>
+                {
+                    // 取得
+                    if (other.GetOwner() == null)
+                    {
+                        other.SetOwner(this);
+                        _ballStockUseCase.PickUp(other);
+                        return;
+                    }
 
-            // TODO: 仮の取得
-            tickAsObservable
-                .Where(_ => Input.GetKeyDown(KeyCode.Return))
-                .Subscribe(_ => _ballStockUseCase.PickUp())
+                    // ダメージ
+                    if (other.GetOwner() != this)
+                    {
+
+                    }
+                })
                 .AddTo(this);
         }
     }

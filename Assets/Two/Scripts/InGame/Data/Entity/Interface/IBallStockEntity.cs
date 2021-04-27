@@ -1,3 +1,5 @@
+using Two.InGame.Presentation.View.Interface;
+
 namespace Two.InGame.Data.Entity.Interface
 {
     public interface IBallStockEntity
@@ -5,7 +7,7 @@ namespace Two.InGame.Data.Entity.Interface
         int GetStockCount();
         bool IsStockFull();
         bool IsStockEmpty();
-        void Increase();
-        void Decrease();
+        void Increase(IBallView ballView);
+        IBallView Decrease();
     }
 }

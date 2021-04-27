@@ -1,6 +1,7 @@
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.Model.Interface;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Presentation.View.Interface;
 
 namespace Two.InGame.Domain.UseCase
 {
@@ -15,14 +16,14 @@ namespace Two.InGame.Domain.UseCase
             _ballStockModel = ballStockModel;
         }
 
-        public void PickUp()
+        public void PickUp(IBallView ballView)
         {
             if (_ballStockEntity.IsStockFull())
             {
                 return;
             }
 
-            _ballStockEntity.Increase();
+            _ballStockEntity.Increase(ballView);
             _ballStockModel.SetStockCount(_ballStockEntity.GetStockCount());
         }
 
@@ -33,7 +34,8 @@ namespace Two.InGame.Domain.UseCase
                 return;
             }
 
-            _ballStockEntity.Decrease();
+            var ball = _ballStockEntity.Decrease();
+            ball.SetOwner(null);
             _ballStockModel.SetStockCount(_ballStockEntity.GetStockCount());
         }
     }

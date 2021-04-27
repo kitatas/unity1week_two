@@ -7,7 +7,7 @@ namespace Two.InGame.Domain.UseCase
     {
         public float horizontal => Input.GetAxisRaw("Horizontal");
         public float vertical => Input.GetAxisRaw("Vertical");
-        public bool isAttack => Input.GetKeyDown(KeyCode.Space);
+        public bool isAttack => Input.GetMouseButtonDown(0);
         public Vector3 mousePosition => Input.mousePosition;
     }
 }

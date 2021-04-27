@@ -1,25 +1,27 @@
+using System.Collections.Generic;
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
+using Two.InGame.Presentation.View.Interface;
 
 namespace Two.InGame.Data.Entity
 {
     public sealed class BallStockEntity : IBallStockEntity
     {
-        private int _stockCount;
+        private readonly Stack<IBallView> _ballViews;
 
         public BallStockEntity()
         {
-            _stockCount = 0;
+            _ballViews = new Stack<IBallView>();
         }
 
-        public int GetStockCount() => _stockCount;
+        public int GetStockCount() => _ballViews.Count;
 
         public bool IsStockFull() => GetStockCount() >= PlayerParam.MAX_STOCK_COUNT;
 
         public bool IsStockEmpty() => GetStockCount() <= 0;
 
-        public void Increase() => _stockCount++;
+        public void Increase(IBallView ballView) => _ballViews.Push(ballView);
 
-        public void Decrease() => _stockCount--;
+        public IBallView Decrease() => _ballViews.Pop();
     }
 }
