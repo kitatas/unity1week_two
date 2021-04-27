@@ -15,6 +15,7 @@ namespace Two.InGame.Installer
     public sealed class PlayerLifetimeScope : LifetimeScope
     {
         [SerializeField] private BallStockView ballStockView = default;
+        [SerializeField] private HpView hpView = default;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -29,12 +30,14 @@ namespace Two.InGame.Installer
             #region Entity
 
             builder.Register<IBallStockEntity, BallStockEntity>(Lifetime.Scoped);
+            builder.Register<IHpEntity, HpEntity>(Lifetime.Scoped);
 
             #endregion
 
             #region Model
 
             builder.Register<IBallStockModel, BallStockModel>(Lifetime.Scoped);
+            builder.Register<IHpModel, HpModel>(Lifetime.Scoped);
 
             #endregion
 
@@ -44,18 +47,21 @@ namespace Two.InGame.Installer
             builder.Register<IMovementUseCase, MovementUseCase>(Lifetime.Scoped);
             builder.Register<IBallStockUseCase, BallStockUseCase>(Lifetime.Scoped);
             builder.Register<IRotationUseCase, RotationUseCase>(Lifetime.Scoped);
+            builder.Register<IHpUseCase, HpUseCase>(Lifetime.Scoped);
 
             #endregion
 
             #region View
 
             builder.RegisterInstance<BallStockView>(ballStockView);
+            builder.RegisterInstance<HpView>(hpView);
 
             #endregion
 
             #region Presenter
 
             builder.RegisterEntryPoint<BallStockPresenter>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<HpPresenter>(Lifetime.Scoped);
 
             #endregion
         }
