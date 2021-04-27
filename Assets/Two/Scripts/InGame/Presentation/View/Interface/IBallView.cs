@@ -1,10 +1,12 @@
-using Two.InGame.Presentation.Controller;
+using Two.InGame.Application;
+using UnityEngine;
 
 namespace Two.InGame.Presentation.View.Interface
 {
     public interface IBallView
     {
-        PlayerController GetOwner();
-        void SetOwner(PlayerController owner);
+        PlayerType GetOwnerType();
+        void SetOwner(Transform owner, PlayerType playerType);
+        void Shot();
     }
 }

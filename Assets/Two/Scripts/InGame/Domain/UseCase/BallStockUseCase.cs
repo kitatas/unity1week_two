@@ -35,7 +35,7 @@ namespace Two.InGame.Domain.UseCase
             }
 
             var ball = _ballStockEntity.Decrease();
-            ball.SetOwner(null);
+            ball.Shot();
             _ballStockModel.SetStockCount(_ballStockEntity.GetStockCount());
         }
     }

@@ -1,3 +1,4 @@
+using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.View.Interface;
 using UniRx;
@@ -9,19 +10,23 @@ namespace Two.InGame.Presentation.Controller
 {
     public sealed class PlayerController : MonoBehaviour
     {
+        [SerializeField] private PlayerType playerType = default;
+
         private IInputProvider _inputProvider;
         private IMovementUseCase _movementUseCase;
         private IRotationUseCase _rotationUseCase;
         private IBallStockUseCase _ballStockUseCase;
+        private IHpUseCase _hpUseCase;
 
         [Inject]
         public void Construct(IInputProvider inputProvider, IMovementUseCase movementUseCase,
-            IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase)
+            IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase)
         {
             _inputProvider = inputProvider;
             _movementUseCase = movementUseCase;
             _rotationUseCase = rotationUseCase;
             _ballStockUseCase = ballStockUseCase;
+            _hpUseCase = hpUseCase;
         }
 
         private void Start()
@@ -58,19 +63,20 @@ namespace Two.InGame.Presentation.Controller
             hitBallAsObservable
                 .Subscribe(other =>
                 {
-                    // 取得
-                    if (other.GetOwner() == null)
-                    {
-                        other.SetOwner(this);
-                        _ballStockUseCase.PickUp(other);
-                        return;
-                    }
-
+                    var ballOwner = other.GetOwnerType();
                     // ダメージ
-                    if (other.GetOwner() != this)
+                    if (ballOwner != PlayerType.None && ballOwner != playerType)
                     {
-
+                        _hpUseCase.Damage();
+                        if (_hpUseCase.IsDead())
+                        {
+                            // TODO: ゲーム終了
+                        }
                     }
+
+                    // 取得
+                    other.SetOwner(transform, playerType);
+                    _ballStockUseCase.PickUp(other);
                 })
                 .AddTo(this);
         }

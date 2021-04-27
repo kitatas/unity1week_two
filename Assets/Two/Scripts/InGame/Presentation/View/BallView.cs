@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Triggers;
+using Two.InGame.Application;
 using Two.InGame.Presentation.Controller;
 using Two.InGame.Presentation.View.Interface;
 using UniRx;
@@ -14,9 +15,8 @@ namespace Two.InGame.Presentation.View
     [RequireComponent(typeof(Collider))]
     public sealed class BallView : MonoBehaviour, IBallView
     {
-        private bool _isOwn;
-
-        private PlayerController _owner;
+        private PlayerType _ownerType;
+        private Transform _owner;
         private CancellationToken _token;
         private Rigidbody _rigidbody;
         private Collider _collider;
@@ -25,7 +25,7 @@ namespace Two.InGame.Presentation.View
 
         private void Awake()
         {
-            _isOwn = false;
+            _ownerType = PlayerType.None;
             _owner = null;
             _token = this.GetCancellationTokenOnDestroy();
             _rigidbody = GetComponent<Rigidbody>();
@@ -35,39 +35,43 @@ namespace Two.InGame.Presentation.View
         private void Start()
         {
             this.UpdateAsObservable()
-                .Where(_ => GetOwner() != null && _isOwn)
-                .Subscribe(_ => transform.position = GetOwner().transform.position)
+                .Where(_ => _owner != null)
+                .Subscribe(_ => transform.position = _owner.position)
                 .AddTo(this);
         }
 
-        public PlayerController GetOwner() => _owner;
+        public PlayerType GetOwnerType() => _ownerType;
 
-        public void SetOwner(PlayerController owner)
+        public void SetOwner(Transform owner, PlayerType playerType)
         {
-            if (owner == null)
-            {
-                _isOwn = false;
-                _rigidbody.AddForce(GetOwner().transform.forward * _shotPower, ForceMode.VelocityChange);
-                GroundAsync(_token).Forget();
-            }
-            else
-            {
-                _owner = owner;
-                _isOwn = true;
-                _rigidbody.velocity = Vector3.zero;
-                _collider.enabled = false;
-            }
+            _owner = owner;
+            _ownerType = playerType;
+            _rigidbody.velocity = Vector3.zero;
+            _collider.enabled = false;
+        }
+
+        public void Shot()
+        {
+            _rigidbody.AddForce(_owner.forward * _shotPower, ForceMode.VelocityChange);
+            _owner = null;
+            GroundAsync(_token).Forget();
         }
 
         private async UniTaskVoid GroundAsync(CancellationToken token)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: token);
 
+            // TODO: 壁をすり抜けてしまう場合がある
             _collider.enabled = true;
 
-            await this.GetAsyncCollisionEnterTrigger().OnCollisionEnterAsync(token);
+            var hitData = await this.GetAsyncCollisionEnterTrigger().OnCollisionEnterAsync(token);
 
-            _owner = null;
+            // player以外に衝突した場合
+            // TODO: PlayerControllerに依存しないように修正
+            if (hitData.gameObject.GetComponent<PlayerController>() == null)
+            {
+                _ownerType = PlayerType.None;
+            }
         }
     }
 }
