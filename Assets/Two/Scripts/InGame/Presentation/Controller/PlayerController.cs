@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.View.Interface;
@@ -8,9 +9,10 @@ using VContainer;
 
 namespace Two.InGame.Presentation.Controller
 {
+    [RequireComponent(typeof(PhotonView))]
     public sealed class PlayerController : MonoBehaviour
     {
-        [SerializeField] private PlayerType playerType = default;
+        private PlayerType _playerType;
 
         private IInputProvider _inputProvider;
         private IMovementUseCase _movementUseCase;
@@ -34,10 +36,14 @@ namespace Two.InGame.Presentation.Controller
 
         private void Start()
         {
+            var photonView = GetComponent<PhotonView>();
+
             var tickAsObservable = this.UpdateAsObservable()
+                .Where(_ => photonView.IsMine)
                 .Where(_ => _gameStateUseCase.IsEqual(GameState.Battle));
 
             var fixedTickAsObservable = this.FixedUpdateAsObservable()
+                .Where(_ => photonView.IsMine)
                 .Where(_ => _gameStateUseCase.IsEqual(GameState.Battle));
 
             var hitBallAsObservable = this.OnCollisionEnterAsObservable()
@@ -71,7 +77,7 @@ namespace Two.InGame.Presentation.Controller
                 {
                     var ballOwner = other.GetOwnerType();
                     // ダメージ
-                    if (ballOwner != PlayerType.None && ballOwner != playerType)
+                    if (ballOwner != PlayerType.None && ballOwner != _playerType)
                     {
                         _hpUseCase.Damage();
                         if (_hpUseCase.IsDead())
@@ -81,10 +87,15 @@ namespace Two.InGame.Presentation.Controller
                     }
 
                     // 取得
-                    other.SetOwner(transform, playerType);
+                    other.SetOwner(transform, _playerType);
                     _ballStockUseCase.PickUp(other);
                 })
                 .AddTo(this);
+        }
+
+        public void Init(PlayerType playerType)
+        {
+            _playerType = playerType;
         }
     }
 }

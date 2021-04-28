@@ -15,4 +15,13 @@ namespace Two.InGame.Application
         Battle,
         Result,
     }
+
+    public enum MatchingState
+    {
+        None,
+        Connecting,
+        Matching,
+        Matched,
+        Disconnected,
+    }
 }
