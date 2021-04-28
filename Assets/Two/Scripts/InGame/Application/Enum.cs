@@ -6,4 +6,13 @@ namespace Two.InGame.Application
         Master,
         Client,
     }
+
+    public enum GameState
+    {
+        None,
+        Matching,
+        Ready,
+        Battle,
+        Result,
+    }
 }

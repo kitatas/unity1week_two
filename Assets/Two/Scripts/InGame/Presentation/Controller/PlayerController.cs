@@ -17,22 +17,28 @@ namespace Two.InGame.Presentation.Controller
         private IRotationUseCase _rotationUseCase;
         private IBallStockUseCase _ballStockUseCase;
         private IHpUseCase _hpUseCase;
+        private IGameStateUseCase _gameStateUseCase;
 
         [Inject]
         public void Construct(IInputProvider inputProvider, IMovementUseCase movementUseCase,
-            IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase)
+            IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase,
+            IGameStateUseCase gameStateUseCase)
         {
             _inputProvider = inputProvider;
             _movementUseCase = movementUseCase;
             _rotationUseCase = rotationUseCase;
             _ballStockUseCase = ballStockUseCase;
             _hpUseCase = hpUseCase;
+            _gameStateUseCase = gameStateUseCase;
         }
 
         private void Start()
         {
-            var tickAsObservable = this.UpdateAsObservable();
-            var fixedTickAsObservable = this.FixedUpdateAsObservable();
+            var tickAsObservable = this.UpdateAsObservable()
+                .Where(_ => _gameStateUseCase.IsEqual(GameState.Battle));
+
+            var fixedTickAsObservable = this.FixedUpdateAsObservable()
+                .Where(_ => _gameStateUseCase.IsEqual(GameState.Battle));
 
             var hitBallAsObservable = this.OnCollisionEnterAsObservable()
                 .Select(other => other.gameObject.GetComponent<IBallView>())
