@@ -16,8 +16,7 @@ namespace Two.InGame.Presentation.Controller
         public void Generate(PlayerType playerType)
         {
             var position = playerType == PlayerType.Master ? _masterPosition : _clientPosition;
-            var player = PhotonNetwork.Instantiate(playerController.name, position, Quaternion.identity);
-            player.GetComponent<PlayerController>().Init(playerType);
+            PhotonNetwork.Instantiate(playerController.name, position, Quaternion.identity);
 
             if (playerType == PlayerType.Master)
             {

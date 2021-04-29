@@ -5,6 +5,10 @@ namespace Two.InGame.Data.Entity.Interface
     public interface IMatchingEntity
     {
         void SetMatchingUserName(string player, string enemy);
-        void SetPlayerType(PlayerType type);
+        void SetMatchingUserType(PlayerType player, PlayerType enemy);
+        string GetPlayerName();
+        string GetEnemyName();
+        PlayerType GetPlayerType();
+        PlayerType GetEnemyType();
     }
 }

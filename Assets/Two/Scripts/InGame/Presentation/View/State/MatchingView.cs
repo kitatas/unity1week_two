@@ -51,6 +51,7 @@ namespace Two.InGame.Presentation.View.State
                 _matchingStateUseCase.SetState(MatchingState.Matched);
                 await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken: token);
 
+                InitPlayer();
                 _matchingStateUseCase.SetState(MatchingState.None);
                 return GameState.Ready;
             }
@@ -64,6 +65,15 @@ namespace Two.InGame.Presentation.View.State
         public override UniTask DisposeAsync(CancellationToken token)
         {
             return base.DisposeAsync(token);
+        }
+
+        private static void InitPlayer()
+        {
+            var players = FindObjectsOfType<PlayerController>();
+            foreach (var player in players)
+            {
+                player.SetName();
+            }
         }
     }
 }

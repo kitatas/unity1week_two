@@ -2,9 +2,9 @@ namespace Two.InGame.Application
 {
     public enum PlayerType
     {
-        None,
-        Master,
-        Client,
+        None = 0,
+        Master = 1,
+        Client = 2,
     }
 
     public enum GameState

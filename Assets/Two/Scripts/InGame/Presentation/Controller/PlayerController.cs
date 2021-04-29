@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Presentation.View;
 using Two.InGame.Presentation.View.Interface;
 using UniRx;
 using UniRx.Triggers;
@@ -12,7 +13,10 @@ namespace Two.InGame.Presentation.Controller
     [RequireComponent(typeof(PhotonView))]
     public sealed class PlayerController : MonoBehaviour
     {
+        [SerializeField] private PhotonView photonView = default;
+        [SerializeField] private NameView nameView = default;
         private PlayerType _playerType;
+        private PlayerType _enemyType;
 
         private IInputProvider _inputProvider;
         private IMovementUseCase _movementUseCase;
@@ -20,11 +24,12 @@ namespace Two.InGame.Presentation.Controller
         private IBallStockUseCase _ballStockUseCase;
         private IHpUseCase _hpUseCase;
         private IGameStateUseCase _gameStateUseCase;
+        private IMatchingUseCase _matchingUseCase;
 
         [Inject]
         public void Construct(IInputProvider inputProvider, IMovementUseCase movementUseCase,
             IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase,
-            IGameStateUseCase gameStateUseCase)
+            IGameStateUseCase gameStateUseCase, IMatchingUseCase matchingUseCase)
         {
             _inputProvider = inputProvider;
             _movementUseCase = movementUseCase;
@@ -32,12 +37,11 @@ namespace Two.InGame.Presentation.Controller
             _ballStockUseCase = ballStockUseCase;
             _hpUseCase = hpUseCase;
             _gameStateUseCase = gameStateUseCase;
+            _matchingUseCase = matchingUseCase;
         }
 
         private void Start()
         {
-            var photonView = GetComponent<PhotonView>();
-
             var tickAsObservable = this.UpdateAsObservable()
                 .Where(_ => photonView.IsMine)
                 .Where(_ => _gameStateUseCase.IsEqual(GameState.Battle));
@@ -93,9 +97,20 @@ namespace Two.InGame.Presentation.Controller
                 .AddTo(this);
         }
 
-        public void Init(PlayerType playerType)
+        public void SetName()
         {
-            _playerType = playerType;
+            if (photonView.IsMine)
+            {
+                nameView.Init(_matchingUseCase.GetPlayerName());
+                _playerType = _matchingUseCase.GetPlayerType();
+                _enemyType = _matchingUseCase.GetEnemyType();
+            }
+            else
+            {
+                nameView.Init(_matchingUseCase.GetEnemyName());
+                _playerType = _matchingUseCase.GetEnemyType();
+                _enemyType = _matchingUseCase.GetPlayerType();
+            }
         }
     }
 }

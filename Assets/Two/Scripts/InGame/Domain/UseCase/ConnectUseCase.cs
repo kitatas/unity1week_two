@@ -64,7 +64,8 @@ namespace Two.InGame.Domain.UseCase
             _matchingEntity.SetMatchingUserName(playerName, enemyName);
 
             var playerType = PhotonNetwork.IsMasterClient ? PlayerType.Master : PlayerType.Client;
-            _matchingEntity.SetPlayerType(playerType);
+            var enemyType = PhotonNetwork.IsMasterClient ? PlayerType.Client : PlayerType.Master;
+            _matchingEntity.SetMatchingUserType(playerType, enemyType);
             return playerType;
         }
 
