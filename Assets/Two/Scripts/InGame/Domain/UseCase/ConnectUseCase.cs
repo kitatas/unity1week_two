@@ -4,9 +4,9 @@ using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using Photon.Realtime;
 using Pun2Task;
+using Two.Common.Domain.Repository.Interface;
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
-using Two.InGame.Domain.Repository.Interface;
 using Two.InGame.Domain.UseCase.Interface;
 
 namespace Two.InGame.Domain.UseCase

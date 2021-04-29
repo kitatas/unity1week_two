@@ -1,4 +1,4 @@
-namespace Two.InGame.Domain.Repository.Interface
+namespace Two.Common.Domain.Repository.Interface
 {
     public interface INameRepository
     {

@@ -1,9 +1,9 @@
+using Two.Common.Domain.Repository;
+using Two.Common.Domain.Repository.Interface;
 using Two.InGame.Data.Entity;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.Model;
 using Two.InGame.Domain.Model.Interface;
-using Two.InGame.Domain.Repository;
-using Two.InGame.Domain.Repository.Interface;
 using Two.InGame.Domain.UseCase;
 using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.Controller;
@@ -50,6 +50,7 @@ namespace Two.InGame.Installer
             builder.Register<IConnectUseCase, ConnectUseCase>(Lifetime.Singleton);
             builder.Register<IGameStateUseCase, GameStateUseCase>(Lifetime.Singleton);
             builder.Register<IMatchingStateUseCase, MatchingStateUseCase>(Lifetime.Singleton);
+            builder.Register<IMatchingUseCase, MatchingUseCase>(Lifetime.Singleton);
 
             #endregion
 

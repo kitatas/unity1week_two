@@ -1,8 +1,8 @@
+using Two.Common.Domain.Repository.Interface;
 using Two.InGame.Application;
-using Two.InGame.Domain.Repository.Interface;
 using UnityEngine;
 
-namespace Two.InGame.Domain.Repository
+namespace Two.Common.Domain.Repository
 {
     public sealed class NameRepository : INameRepository
     {
