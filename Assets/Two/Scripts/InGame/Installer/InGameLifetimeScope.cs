@@ -1,5 +1,4 @@
-using Two.Common.Domain.Repository;
-using Two.Common.Domain.Repository.Interface;
+using Two.Common.Installer;
 using Two.InGame.Data.Entity;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.Model;
@@ -14,7 +13,7 @@ using VContainer.Unity;
 
 namespace Two.InGame.Installer
 {
-    public sealed class InGameLifetimeScope : LifetimeScope
+    public sealed class InGameLifetimeScope : CommonLifetimeScope
     {
         [SerializeField] private MatchingView matchingView = default;
         [SerializeField] private ReadyView readyView = default;
@@ -24,6 +23,8 @@ namespace Two.InGame.Installer
 
         protected override void Configure(IContainerBuilder builder)
         {
+            base.Configure(builder);
+
             #region Entity
 
             builder.Register<IGameStateEntity, GameStateEntity>(Lifetime.Singleton);
@@ -36,12 +37,6 @@ namespace Two.InGame.Installer
 
             builder.Register<IGameStateModel, GameStateModel>(Lifetime.Singleton);
             builder.Register<IMatchingStateModel, MatchingStateModel>(Lifetime.Singleton);
-
-            #endregion
-
-            #region Repository
-
-            builder.Register<INameRepository, NameRepository>(Lifetime.Singleton);
 
             #endregion
 

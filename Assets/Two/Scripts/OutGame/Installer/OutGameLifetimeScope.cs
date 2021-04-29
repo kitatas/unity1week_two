@@ -1,22 +1,16 @@
-using Two.Common.Domain.Repository;
-using Two.Common.Domain.Repository.Interface;
+using Two.Common.Installer;
 using Two.OutGame.Domain.UseCase;
 using Two.OutGame.Domain.UseCase.Interface;
 using VContainer;
-using VContainer.Unity;
 
 namespace Two.OutGame.Installer
 {
-    public sealed class OutGameLifetimeScope : LifetimeScope
+    public sealed class OutGameLifetimeScope : CommonLifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            #region Repository
+            base.Configure(builder);
 
-            builder.Register<INameRepository, NameRepository>(Lifetime.Singleton);
-
-            #endregion
-            
             #region UseCase
 
             builder.Register<INameResistUseCase, NameResistUseCase>(Lifetime.Singleton);

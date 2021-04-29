@@ -72,5 +72,25 @@ namespace Two.InGame.Domain.UseCase
         private static bool IsMaxPlayer() => IsPlayerCount(PhotonNetwork.CurrentRoom.MaxPlayers);
 
         private static bool IsPlayerCount(int count) => PhotonNetwork.CurrentRoom?.PlayerCount == count;
+
+        public void Disconnect()
+        {
+            if (PhotonNetwork.IsConnected == false)
+            {
+                return;
+            }
+
+            if (PhotonNetwork.CurrentRoom == null)
+            {
+                return;
+            }
+
+            if (IsPlayerCount(1))
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = true;
+            }
+
+            PhotonNetwork.Disconnect();
+        }
     }
 }

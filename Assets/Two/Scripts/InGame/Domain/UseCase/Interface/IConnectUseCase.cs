@@ -8,5 +8,6 @@ namespace Two.InGame.Domain.UseCase.Interface
     {
         UniTask JoinRoomAsync(CancellationToken token);
         UniTask<PlayerType> MatchingAsync(CancellationToken token);
+        void Disconnect();
     }
 }
