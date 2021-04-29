@@ -13,14 +13,16 @@ namespace Two.InGame.Presentation.View.State
     {
         private PlayerGenerator _playerGenerator;
         private IMatchingStateUseCase _matchingStateUseCase;
+        private IGameStateUseCase _gameStateUseCase;
         private IConnectUseCase _connectUseCase;
 
         [Inject]
         private void Construct(PlayerGenerator playerGenerator, IMatchingStateUseCase matchingStateUseCase,
-            IConnectUseCase connectUseCase)
+            IGameStateUseCase gameStateUseCase, IConnectUseCase connectUseCase)
         {
             _playerGenerator = playerGenerator;
             _matchingStateUseCase = matchingStateUseCase;
+            _gameStateUseCase = gameStateUseCase;
             _connectUseCase = connectUseCase;
         }
 
@@ -53,6 +55,9 @@ namespace Two.InGame.Presentation.View.State
 
                 InitPlayer();
                 _matchingStateUseCase.SetState(MatchingState.None);
+
+                CheckDisconnectAsync(token).Forget();
+
                 return GameState.Ready;
             }
             catch (Exception e)
@@ -73,6 +78,20 @@ namespace Two.InGame.Presentation.View.State
             foreach (var player in players)
             {
                 player.SetName();
+            }
+        }
+
+        private async UniTaskVoid CheckDisconnectAsync(CancellationToken token)
+        {
+            await UniTask.WaitUntil(() => _connectUseCase.IsPlayerCount(1), cancellationToken: token);
+
+            // ゲーム中の場合
+            if (_gameStateUseCase.IsEqual(GameState.Matching) ||
+                _gameStateUseCase.IsEqual(GameState.Ready) ||
+                _gameStateUseCase.IsEqual(GameState.Battle))
+            {
+                _gameStateUseCase.SetState(GameState.None);
+                _matchingStateUseCase.SetState(MatchingState.Disconnected);
             }
         }
     }
