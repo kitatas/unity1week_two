@@ -6,6 +6,8 @@ using Two.InGame.Domain.Model.Interface;
 using Two.InGame.Domain.UseCase;
 using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.Controller;
+using Two.InGame.Presentation.Presenter;
+using Two.InGame.Presentation.View;
 using Two.InGame.Presentation.View.State;
 using UnityEngine;
 using VContainer;
@@ -19,6 +21,7 @@ namespace Two.InGame.Installer
         [SerializeField] private ReadyView readyView = default;
         [SerializeField] private BattleView battleView = default;
         [SerializeField] private ResultView resultView = default;
+        [SerializeField] private MatchingStateView matchingStateView = default;
         [SerializeField] private PlayerGenerator playerGenerator = default;
 
         protected override void Configure(IContainerBuilder builder)
@@ -55,6 +58,13 @@ namespace Two.InGame.Installer
             builder.RegisterInstance<ReadyView>(readyView);
             builder.RegisterInstance<BattleView>(battleView);
             builder.RegisterInstance<ResultView>(resultView);
+            builder.RegisterInstance<MatchingStateView>(matchingStateView);
+
+            #endregion
+
+            #region Presenter
+
+            builder.RegisterEntryPoint<MatchingStatePresenter>(Lifetime.Singleton);
 
             #endregion
 
