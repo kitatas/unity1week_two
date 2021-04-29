@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Two.InGame.Application;
+using Two.InGame.Presentation.Controller;
 
 namespace Two.InGame.Presentation.View.State
 {
@@ -20,6 +22,12 @@ namespace Two.InGame.Presentation.View.State
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
+            var players = FindObjectsOfType<PlayerController>();
+            await UniTask.WaitUntil(() =>
+            {
+                return players.Any(player => player.IsDead());
+            }, cancellationToken: token);
+
             return GameState.Result;
         }
 
