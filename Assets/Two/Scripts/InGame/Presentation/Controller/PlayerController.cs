@@ -15,6 +15,7 @@ namespace Two.InGame.Presentation.Controller
     {
         [SerializeField] private PhotonView photonView = default;
         [SerializeField] private NameView nameView = default;
+        [SerializeField] private Canvas canvas = default;
         private PlayerType _playerType;
         private PlayerType _enemyType;
 
@@ -74,6 +75,11 @@ namespace Two.InGame.Presentation.Controller
             // 回転
             tickAsObservable
                 .Subscribe(_ => _rotationUseCase.Rotate(_inputProvider.mousePosition))
+                .AddTo(this);
+
+            // Canvas位置
+            this.UpdateAsObservable()
+                .Subscribe(_ => canvas.transform.position = transform.position)
                 .AddTo(this);
 
             hitBallAsObservable
