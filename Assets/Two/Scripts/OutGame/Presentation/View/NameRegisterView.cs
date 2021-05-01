@@ -7,22 +7,22 @@ using VContainer;
 
 namespace Two.OutGame.Presentation.View
 {
-    public sealed class NameResistView : MonoBehaviour
+    public sealed class NameRegisterView : MonoBehaviour
     {
         [SerializeField] private TMP_InputField nameField = default;
         [SerializeField] private Button resistButton = default;
 
-        private INameResistUseCase _nameResistUseCase;
+        private INameRegisterUseCase _nameRegisterUseCase;
 
         [Inject]
-        private void Construct(INameResistUseCase nameResistUseCase)
+        private void Construct(INameRegisterUseCase nameRegisterUseCase)
         {
-            _nameResistUseCase = nameResistUseCase;
+            _nameRegisterUseCase = nameRegisterUseCase;
         }
 
         private void Start()
         {
-            nameField.text = _nameResistUseCase.LoadName();
+            nameField.text = _nameRegisterUseCase.LoadName();
 
             resistButton
                 .OnClickAsObservable()
@@ -33,7 +33,7 @@ namespace Two.OutGame.Presentation.View
                         return;
                     }
 
-                    _nameResistUseCase.SaveName(nameField.text);
+                    _nameRegisterUseCase.SaveName(nameField.text);
                 })
                 .AddTo(this);
         }

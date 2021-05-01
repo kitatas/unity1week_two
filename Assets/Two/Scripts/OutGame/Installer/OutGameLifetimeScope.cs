@@ -13,7 +13,7 @@ namespace Two.OutGame.Installer
 
             #region UseCase
 
-            builder.Register<INameResistUseCase, NameResistUseCase>(Lifetime.Singleton);
+            builder.Register<INameRegisterUseCase, NameRegisterUseCase>(Lifetime.Singleton);
 
             #endregion
         }

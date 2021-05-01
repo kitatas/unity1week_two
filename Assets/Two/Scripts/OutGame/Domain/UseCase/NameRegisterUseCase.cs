@@ -3,11 +3,11 @@ using Two.OutGame.Domain.UseCase.Interface;
 
 namespace Two.OutGame.Domain.UseCase
 {
-    public sealed class NameResistUseCase : INameResistUseCase
+    public sealed class NameRegisterUseCase : INameRegisterUseCase
     {
         private readonly INameRepository _nameRepository;
 
-        public NameResistUseCase(INameRepository nameRepository)
+        public NameRegisterUseCase(INameRepository nameRepository)
         {
             _nameRepository = nameRepository;
         }

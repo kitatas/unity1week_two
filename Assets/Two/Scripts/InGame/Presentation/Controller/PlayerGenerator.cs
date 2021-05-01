@@ -7,7 +7,7 @@ namespace Two.InGame.Presentation.Controller
 {
     public sealed class PlayerGenerator : MonoBehaviour
     {
-        [SerializeField] private PlayerController playerController = default;
+        [SerializeField] private GameObject playerController = default;
         [SerializeField] private BallView ballView = default;
 
         private readonly Vector3 _masterPosition = new Vector3(-5.0f, 0.0f, 0.0f);
