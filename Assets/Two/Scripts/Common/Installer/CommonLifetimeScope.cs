@@ -14,8 +14,6 @@ namespace Two.Common.Installer
     {
         [SerializeField] private BgmTable bgmTable = default;
         [SerializeField] private SeTable seTable = default;
-        [SerializeField] private BgmController bgmController = default;
-        [SerializeField] private SeController seController = default;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -43,8 +41,8 @@ namespace Two.Common.Installer
             #region Controller
 
             builder.Register<SceneLoader>(Lifetime.Singleton);
-            builder.RegisterInstance(bgmController);
-            builder.RegisterInstance(seController);
+            builder.RegisterInstance(FindObjectOfType<BgmController>());
+            builder.RegisterInstance(FindObjectOfType<SeController>());
 
             #endregion
         }
