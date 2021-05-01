@@ -1,10 +1,13 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
+using Two.Common.Application;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
 using UnityEngine;
+using UnityEngine.UI;
 using VContainer;
 
 namespace Two.InGame.Presentation.View.State
@@ -12,6 +15,7 @@ namespace Two.InGame.Presentation.View.State
     public sealed class ResultView : BaseState
     {
         [SerializeField] private TextMeshProUGUI resultText = default;
+        [SerializeField] private Image backGround = default;
 
         private IMatchingUseCase _matchingUseCase;
 
@@ -39,7 +43,11 @@ namespace Two.InGame.Presentation.View.State
             // 死亡演出終了待ち
             await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
 
-            resultText.text = $"winner: {_matchingUseCase.GetWinnerName()}";
+            resultText.text = $"{_matchingUseCase.GetWinnerName()}さんの勝ち";
+            backGround.rectTransform
+                .DOAnchorPosY(0.0f, AnimationTime.UI_MOVE)
+                .SetEase(Ease.OutBounce);
+
             return GameState.None;
         }
 

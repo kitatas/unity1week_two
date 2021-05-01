@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
+using Two.Common.Application;
 using Two.InGame.Application;
 using UnityEngine;
 using VContainer;
@@ -50,16 +52,28 @@ namespace Two.InGame.Presentation.View.State
         private async UniTask StartCountDownAsync(CancellationToken token)
         {
             countDownText.text = "3";
-            await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
+            await countDownText.rectTransform
+                .DOShakeScale(AnimationTime.COUNT_DOWN)
+                .SetEase(Ease.Linear)
+                .WithCancellation(token);
 
             countDownText.text = "2";
-            await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
+            await countDownText.rectTransform
+                .DOShakeScale(AnimationTime.COUNT_DOWN)
+                .SetEase(Ease.Linear)
+                .WithCancellation(token);
 
             countDownText.text = "1";
-            await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
+            await countDownText.rectTransform
+                .DOShakeScale(AnimationTime.COUNT_DOWN)
+                .SetEase(Ease.Linear)
+                .WithCancellation(token);
 
             countDownText.text = "Start!!";
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: token);
+            await countDownText.rectTransform
+                .DOShakeScale(AnimationTime.UI_MOVE)
+                .SetEase(Ease.Linear)
+                .WithCancellation(token);
 
             countDownText.text = "";
         }

@@ -1,4 +1,6 @@
+using DG.Tweening;
 using Photon.Pun;
+using Two.Common.Application;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.View;
@@ -16,6 +18,7 @@ namespace Two.InGame.Presentation.Controller
         [SerializeField] private PhotonView photonView = default;
         [SerializeField] private NameView nameView = default;
         [SerializeField] private Canvas canvas = default;
+        [SerializeField] private GameObject deadEffect = default;
         private PlayerType _playerType;
         private PlayerType _enemyType;
 
@@ -55,6 +58,9 @@ namespace Two.InGame.Presentation.Controller
                 .Select(other => other.gameObject.GetComponent<IBallView>())
                 .Where(other => other != null);
 
+            var mainCamera = FindObjectOfType<Camera>();
+            canvas.worldCamera = mainCamera;
+
             // 移動方向の入力
             var moveVector = Vector3.zero;
             tickAsObservable
@@ -82,6 +88,7 @@ namespace Two.InGame.Presentation.Controller
                 .Subscribe(_ => canvas.transform.position = transform.position)
                 .AddTo(this);
 
+            Tweener tweener = null;
             hitBallAsObservable
                 .Subscribe(other =>
                 {
@@ -89,11 +96,16 @@ namespace Two.InGame.Presentation.Controller
                     // ダメージ
                     if (ballOwner == _enemyType)
                     {
+                        if (photonView.IsMine)
+                        {
+                            tweener?.Kill();
+                            tweener = mainCamera.DOShakePosition(AnimationTime.UI_MOVE);
+                        }
+
                         _hpUseCase.Damage();
                         if (IsDead())
                         {
-                            // TODO: 死亡演出
-                            _matchingUseCase.SetWinner(_enemyType);
+                            DestroyPlayer();
                         }
                     }
 
@@ -126,6 +138,20 @@ namespace Two.InGame.Presentation.Controller
                 _playerType = _matchingUseCase.GetEnemyType();
                 _enemyType = _matchingUseCase.GetPlayerType();
             }
+        }
+
+        private void DestroyPlayer()
+        {
+            Instantiate(deadEffect, transform.position, Quaternion.identity);
+
+            var balls = FindObjectsOfType<BallView>();
+            foreach (var ball in balls)
+            {
+                ball.gameObject.SetActive(false);
+            }
+
+            _matchingUseCase.SetWinner(_enemyType);
+            transform.parent.gameObject.SetActive(false);
         }
     }
 }
