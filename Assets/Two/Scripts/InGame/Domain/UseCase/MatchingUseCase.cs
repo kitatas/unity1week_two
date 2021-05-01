@@ -47,5 +47,20 @@ namespace Two.InGame.Domain.UseCase
         {
             return GetUserName(_winner);
         }
+
+        public string GetTweetText()
+        {
+            if (GetWinnerName() == GetPlayerName())
+            {
+                return $"{GetEnemyName()}さんに勝利した！";
+            }
+
+            if (GetWinnerName() == GetEnemyName())
+            {
+                return $"{GetEnemyName()}さんに敗北した...";
+            }
+
+            return "";
+        }
     }
 }

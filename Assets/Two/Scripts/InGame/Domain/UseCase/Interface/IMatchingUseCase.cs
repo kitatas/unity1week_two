@@ -11,5 +11,6 @@ namespace Two.InGame.Domain.UseCase.Interface
         void SetWinner(PlayerType type);
         string GetUserName(PlayerType type);
         string GetWinnerName();
+        string GetTweetText();
     }
 }
