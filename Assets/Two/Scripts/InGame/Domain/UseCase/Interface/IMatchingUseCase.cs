@@ -9,6 +9,7 @@ namespace Two.InGame.Domain.UseCase.Interface
         string GetPlayerName();
         string GetEnemyName();
         void SetWinner(PlayerType type);
+        string GetUserName(PlayerType type);
         string GetWinnerName();
     }
 }

@@ -22,6 +22,7 @@ namespace Two.InGame.Installer
         [SerializeField] private BattleView battleView = default;
         [SerializeField] private ResultView resultView = default;
         [SerializeField] private MatchingStateView matchingStateView = default;
+        [SerializeField] private MatchingUserView matchingUserView = default;
         [SerializeField] private PlayerGenerator playerGenerator = default;
 
         protected override void Configure(IContainerBuilder builder)
@@ -59,6 +60,7 @@ namespace Two.InGame.Installer
             builder.RegisterInstance<BattleView>(battleView);
             builder.RegisterInstance<ResultView>(resultView);
             builder.RegisterInstance<MatchingStateView>(matchingStateView);
+            builder.RegisterInstance<MatchingUserView>(matchingUserView);
 
             #endregion
 

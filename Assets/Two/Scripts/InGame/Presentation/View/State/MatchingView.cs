@@ -15,21 +15,24 @@ namespace Two.InGame.Presentation.View.State
         private IMatchingStateUseCase _matchingStateUseCase;
         private IGameStateUseCase _gameStateUseCase;
         private IConnectUseCase _connectUseCase;
+        private MatchingUserView _matchingUserView;
 
         [Inject]
         private void Construct(PlayerGenerator playerGenerator, IMatchingStateUseCase matchingStateUseCase,
-            IGameStateUseCase gameStateUseCase, IConnectUseCase connectUseCase)
+            IGameStateUseCase gameStateUseCase, IConnectUseCase connectUseCase, MatchingUserView matchingUserView)
         {
             _playerGenerator = playerGenerator;
             _matchingStateUseCase = matchingStateUseCase;
             _gameStateUseCase = gameStateUseCase;
             _connectUseCase = connectUseCase;
+            _matchingUserView = matchingUserView;
         }
 
         public override GameState GetState() => GameState.Matching;
 
         public override UniTask InitAsync(CancellationToken token)
         {
+            _matchingUserView.Init();
             return base.InitAsync(token);
         }
 
@@ -54,6 +57,8 @@ namespace Two.InGame.Presentation.View.State
                 await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken: token);
 
                 InitPlayer();
+                await _matchingUserView.ShowPlayerNameAsync(token);
+
                 _matchingStateUseCase.SetState(MatchingState.None);
 
                 CheckDisconnectAsync(token).Forget();

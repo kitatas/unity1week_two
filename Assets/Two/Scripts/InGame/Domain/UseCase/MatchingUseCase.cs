@@ -1,7 +1,6 @@
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.UseCase.Interface;
-using UnityEngine;
 
 namespace Two.InGame.Domain.UseCase
 {
@@ -29,19 +28,24 @@ namespace Two.InGame.Domain.UseCase
             _winner = type;
         }
 
-        public string GetWinnerName()
+        public string GetUserName(PlayerType type)
         {
-            if (_winner == GetPlayerType())
+            if (type == GetPlayerType())
             {
                 return GetPlayerName();
             }
 
-            if (_winner == GetEnemyType())
+            if (type == GetEnemyType())
             {
                 return GetEnemyName();
             }
 
             return $"{PlayerType.None}";
+        }
+
+        public string GetWinnerName()
+        {
+            return GetUserName(_winner);
         }
     }
 }
