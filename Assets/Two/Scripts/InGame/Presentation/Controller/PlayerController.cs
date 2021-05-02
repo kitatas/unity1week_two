@@ -23,6 +23,7 @@ namespace Two.InGame.Presentation.Controller
         private PlayerType _playerType;
         private PlayerType _enemyType;
 
+        private Camera _mainCamera;
         private IInputProvider _inputProvider;
         private IMovementUseCase _movementUseCase;
         private IRotationUseCase _rotationUseCase;
@@ -32,10 +33,11 @@ namespace Two.InGame.Presentation.Controller
         private IMatchingUseCase _matchingUseCase;
 
         [Inject]
-        public void Construct(IInputProvider inputProvider, IMovementUseCase movementUseCase,
+        public void Construct(Camera mainCamera, IInputProvider inputProvider, IMovementUseCase movementUseCase,
             IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase,
             IGameStateUseCase gameStateUseCase, IMatchingUseCase matchingUseCase)
         {
+            _mainCamera = mainCamera;
             _inputProvider = inputProvider;
             _movementUseCase = movementUseCase;
             _rotationUseCase = rotationUseCase;
@@ -59,8 +61,7 @@ namespace Two.InGame.Presentation.Controller
                 .Select(other => other.gameObject.GetComponent<IBallView>())
                 .Where(other => other != null);
 
-            var mainCamera = FindObjectOfType<Camera>();
-            canvas.worldCamera = mainCamera;
+            canvas.worldCamera = _mainCamera;
 
             // 移動方向の入力
             var moveVector = Vector3.zero;
@@ -104,7 +105,7 @@ namespace Two.InGame.Presentation.Controller
                         if (photonView.IsMine)
                         {
                             tweener?.Kill();
-                            tweener = mainCamera.DOShakePosition(AnimationTime.UI_MOVE);
+                            tweener = _mainCamera.DOShakePosition(AnimationTime.UI_MOVE);
                         }
 
                         _hpUseCase.Damage();
