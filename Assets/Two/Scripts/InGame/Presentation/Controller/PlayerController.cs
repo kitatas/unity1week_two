@@ -16,6 +16,7 @@ namespace Two.InGame.Presentation.Controller
     public sealed class PlayerController : MonoBehaviour
     {
         [SerializeField] private PhotonView photonView = default;
+        [SerializeField] private PhotonTransformViewClassic photonTransformViewClassic = default;
         [SerializeField] private NameView nameView = default;
         [SerializeField] private Canvas canvas = default;
         [SerializeField] private GameObject deadEffect = default;
@@ -81,6 +82,10 @@ namespace Two.InGame.Presentation.Controller
             // 回転
             tickAsObservable
                 .Subscribe(_ => _rotationUseCase.Rotate(_inputProvider.mousePosition))
+                .AddTo(this);
+
+            tickAsObservable
+                .Subscribe(_ => photonTransformViewClassic.SetSynchronizedValues(_movementUseCase.GetVelocity(), 0))
                 .AddTo(this);
 
             // Canvas位置

@@ -17,5 +17,7 @@ namespace Two.InGame.Domain.UseCase
         {
             _rigidbody.velocity = moveVector * _moveSpeed * Time.deltaTime;
         }
+
+        public Vector3 GetVelocity() => _rigidbody.velocity;
     }
 }

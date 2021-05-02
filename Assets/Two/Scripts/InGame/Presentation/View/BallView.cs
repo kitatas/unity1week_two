@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Triggers;
+using Photon.Pun;
 using Two.InGame.Application;
 using Two.InGame.Presentation.Controller;
 using Two.InGame.Presentation.View.Interface;
@@ -13,6 +14,8 @@ namespace Two.InGame.Presentation.View
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(PhotonView))]
+    [RequireComponent(typeof(PhotonTransformViewClassic))]
     public sealed class BallView : MonoBehaviour, IBallView
     {
         private PlayerType _ownerType;
@@ -20,6 +23,8 @@ namespace Two.InGame.Presentation.View
         private CancellationToken _token;
         private Rigidbody _rigidbody;
         private Collider _collider;
+        private PhotonView _photonView;
+        private PhotonTransformViewClassic _photonTransformViewClassic;
 
         private readonly float _shotPower = 25.0f;
 
@@ -30,6 +35,8 @@ namespace Two.InGame.Presentation.View
             _token = this.GetCancellationTokenOnDestroy();
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
+            _photonView = GetComponent<PhotonView>();
+            _photonTransformViewClassic = GetComponent<PhotonTransformViewClassic>();
         }
 
         private void Start()
@@ -37,6 +44,15 @@ namespace Two.InGame.Presentation.View
             this.UpdateAsObservable()
                 .Where(_ => _owner != null)
                 .Subscribe(_ => transform.position = _owner.position)
+                .AddTo(this);
+
+            this.UpdateAsObservable()
+                .Where(_ => _photonView.IsMine)
+                .Subscribe(_ =>
+                {
+                    var velocity = _rigidbody.velocity;
+                    _photonTransformViewClassic.SetSynchronizedValues(velocity, 0);
+                })
                 .AddTo(this);
         }
 
