@@ -4,7 +4,7 @@ namespace Two.InGame.Domain.UseCase.Interface
 {
     public interface IBallStockUseCase
     {
-        void PickUp(IBallView ballView);
-        void Shot();
+        void Push(IBallView ballView);
+        IBallView Pop();
     }
 }

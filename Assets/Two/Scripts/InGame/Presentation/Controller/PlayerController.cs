@@ -77,7 +77,7 @@ namespace Two.InGame.Presentation.Controller
             // 攻撃
             tickAsObservable
                 .Where(_ => _inputProvider.isAttack)
-                .Subscribe(_ => photonView.RPC(nameof(Shot), RpcTarget.All))
+                .Subscribe(_ => photonView.RPC(nameof(ShotRpc), RpcTarget.All))
                 .AddTo(this);
 
             // 回転
@@ -117,7 +117,7 @@ namespace Two.InGame.Presentation.Controller
 
                     // 取得
                     other.SetOwner(transform, _playerType);
-                    _ballStockUseCase.PickUp(other);
+                    _ballStockUseCase.Push(other);
                 })
                 .AddTo(this);
         }
@@ -125,9 +125,10 @@ namespace Two.InGame.Presentation.Controller
         public bool IsDead() => _hpUseCase.IsDead();
 
         [PunRPC]
-        private void Shot()
+        private void ShotRpc()
         {
-            _ballStockUseCase.Shot();
+            var ballView = _ballStockUseCase.Pop();
+            ballView?.Shot();
         }
 
         public void SetName()

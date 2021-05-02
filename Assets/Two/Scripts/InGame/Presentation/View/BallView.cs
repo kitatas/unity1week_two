@@ -63,22 +63,31 @@ namespace Two.InGame.Presentation.View
             _owner = owner;
             _ownerType = playerType;
             _rigidbody.velocity = Vector3.zero;
-            _collider.enabled = false;
+            _collider.isTrigger = true;
         }
 
         public void Shot()
         {
             _rigidbody.AddForce(_owner.forward * _shotPower, ForceMode.VelocityChange);
             _owner = null;
-            GroundAsync(_token).Forget();
+            ShotAsync(_token).Forget();
         }
 
-        private async UniTaskVoid GroundAsync(CancellationToken token)
+        private async UniTaskVoid ShotAsync(CancellationToken token)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: token);
-
-            // TODO: 壁をすり抜けてしまう場合がある
-            _collider.enabled = true;
+            // Playerから発射される時に当たり判定を戻す
+            // Ballを2つ所持していた場合、Ball同士で判定しないように
+            while (true)
+            {
+                var exitData = await this.GetAsyncTriggerExitTrigger().OnTriggerExitAsync(token);
+            
+                if (exitData.GetComponent<PlayerController>() != null)
+                {
+                    _collider.isTrigger = false;
+                    break;
+                }
+            }
+            _collider.isTrigger = false;
 
             var hitData = await this.GetAsyncCollisionEnterTrigger().OnCollisionEnterAsync(token);
 
@@ -86,8 +95,14 @@ namespace Two.InGame.Presentation.View
             // TODO: PlayerControllerに依存しないように修正
             if (hitData.gameObject.GetComponent<PlayerController>() == null)
             {
-                _ownerType = PlayerType.None;
+                _photonView.RPC(nameof(SyncOwnerTypeRpc), RpcTarget.All);
             }
+        }
+
+        [PunRPC]
+        private void SyncOwnerTypeRpc()
+        {
+            _ownerType = PlayerType.None;
         }
     }
 }

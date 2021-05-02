@@ -20,7 +20,7 @@ namespace Two.InGame.Domain.UseCase
             _seController = seController;
         }
 
-        public void PickUp(IBallView ballView)
+        public void Push(IBallView ballView)
         {
             if (_ballStockEntity.IsStockFull())
             {
@@ -32,17 +32,17 @@ namespace Two.InGame.Domain.UseCase
             _ballStockModel.SetStockCount(_ballStockEntity.GetStockCount());
         }
 
-        public void Shot()
+        public IBallView Pop()
         {
             if (_ballStockEntity.IsStockEmpty())
             {
-                return;
+                return null;
             }
 
             _seController.Play(SeType.Shot);
             var ball = _ballStockEntity.Decrease();
-            ball.Shot();
             _ballStockModel.SetStockCount(_ballStockEntity.GetStockCount());
+            return ball;
         }
     }
 }
