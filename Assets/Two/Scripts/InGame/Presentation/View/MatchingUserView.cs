@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using Two.Common.Application;
+using Two.Common.Presentation.Controller.Sound;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
 using UnityEngine;
@@ -19,11 +20,13 @@ namespace Two.InGame.Presentation.View
         [SerializeField] private TextMeshProUGUI clientName = default;
 
         private IMatchingUseCase _matchingUseCase;
+        private SeController _seController;
 
         [Inject]
-        private void Construct(IMatchingUseCase matchingUseCase)
+        private void Construct(IMatchingUseCase matchingUseCase, SeController seController)
         {
             _matchingUseCase = matchingUseCase;
+            _seController = seController;
         }
 
         public void Init()
@@ -48,7 +51,9 @@ namespace Two.InGame.Presentation.View
                     .WithCancellation(token)
             );
 
-            await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
+            _seController.Play(SeType.Matched);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(1.5f), cancellationToken: token);
         }
 
         public async UniTask HidePlayerNameAsync(CancellationToken token)

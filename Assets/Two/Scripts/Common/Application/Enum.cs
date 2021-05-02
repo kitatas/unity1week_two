@@ -18,8 +18,12 @@ namespace Two.Common.Application
         Decision,
         Cancel,
         Damage,
+        Notice,
         Matched,
         Alert,
+        Start,
+        Shot,
+        PickUp,
     }
 
     public enum ButtonType

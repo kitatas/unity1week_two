@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using Two.Common.Application;
+using Two.Common.Presentation.Controller.Sound;
 using Two.InGame.Application;
 using UnityEngine;
 using VContainer;
@@ -15,11 +16,13 @@ namespace Two.InGame.Presentation.View.State
         [SerializeField] private TextMeshProUGUI countDownText = default;
 
         private MatchingUserView _matchingUserView;
+        private SeController _seController;
 
         [Inject]
-        private void Construct(MatchingUserView matchingUserView)
+        private void Construct(MatchingUserView matchingUserView, SeController seController)
         {
             _matchingUserView = matchingUserView;
+            _seController = seController;
         }
 
         public override GameState GetState() => GameState.Ready;
@@ -51,24 +54,10 @@ namespace Two.InGame.Presentation.View.State
 
         private async UniTask StartCountDownAsync(CancellationToken token)
         {
-            countDownText.text = "3";
-            await countDownText.rectTransform
-                .DOShakeScale(AnimationTime.COUNT_DOWN)
-                .SetEase(Ease.Linear)
-                .WithCancellation(token);
+            countDownText.text = "Ready...?";
+            await UniTask.Delay(TimeSpan.FromSeconds(AnimationTime.READY), cancellationToken: token);
 
-            countDownText.text = "2";
-            await countDownText.rectTransform
-                .DOShakeScale(AnimationTime.COUNT_DOWN)
-                .SetEase(Ease.Linear)
-                .WithCancellation(token);
-
-            countDownText.text = "1";
-            await countDownText.rectTransform
-                .DOShakeScale(AnimationTime.COUNT_DOWN)
-                .SetEase(Ease.Linear)
-                .WithCancellation(token);
-
+            _seController.Play(SeType.Start);
             countDownText.text = "Start!!";
             await countDownText.rectTransform
                 .DOShakeScale(AnimationTime.UI_MOVE)

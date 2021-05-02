@@ -3,7 +3,7 @@ namespace Two.Common.Application
     public sealed class AnimationTime
     {
         public const float UI_MOVE = 0.5f;
-        public const float COUNT_DOWN = 1.0f;
+        public const float READY = 1.5f;
     }
 
     public sealed class GameConfig

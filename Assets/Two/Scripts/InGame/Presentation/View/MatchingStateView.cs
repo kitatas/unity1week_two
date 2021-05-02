@@ -1,8 +1,11 @@
 using System;
 using TMPro;
+using Two.Common.Application;
+using Two.Common.Presentation.Controller.Sound;
 using Two.InGame.Application;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 namespace Two.InGame.Presentation.View
 {
@@ -10,6 +13,14 @@ namespace Two.InGame.Presentation.View
     {
         [SerializeField] private Image background = default;
         [SerializeField] private TextMeshProUGUI matchingStateText = default;
+
+        private SeController _seController;
+
+        [Inject]
+        private void Construct(SeController seController)
+        {
+            _seController = seController;
+        }
 
         public void Show(MatchingState matchingState)
         {
@@ -25,14 +36,17 @@ namespace Two.InGame.Presentation.View
                     break;
                 case MatchingState.Matching:
                     background.enabled = true;
+                    _seController.Play(SeType.Notice);
                     matchingStateText.text = "対戦相手を探しています。";
                     break;
                 case MatchingState.Matched:
                     background.enabled = true;
+                    _seController.Play(SeType.Notice);
                     matchingStateText.text = "対戦相手が見つかりました。";
                     break;
                 case MatchingState.Disconnected:
                     background.enabled = true;
+                    _seController.Play(SeType.Alert);
                     matchingStateText.text = "通信が切断されました。";
                     break;
                 default:

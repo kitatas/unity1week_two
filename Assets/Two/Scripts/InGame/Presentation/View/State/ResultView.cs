@@ -44,9 +44,10 @@ namespace Two.InGame.Presentation.View.State
             await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
 
             resultText.text = $"{_matchingUseCase.GetWinnerName()}さんの勝ち";
-            backGround.rectTransform
+            await backGround.rectTransform
                 .DOAnchorPosY(0.0f, AnimationTime.UI_MOVE)
-                .SetEase(Ease.OutBounce);
+                .SetEase(Ease.OutBounce)
+                .WithCancellation(token);
 
             return GameState.None;
         }
