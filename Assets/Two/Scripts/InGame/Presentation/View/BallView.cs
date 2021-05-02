@@ -18,6 +18,7 @@ namespace Two.InGame.Presentation.View
     [RequireComponent(typeof(PhotonTransformViewClassic))]
     public sealed class BallView : MonoBehaviour, IBallView
     {
+        private Vector3 _initPosition;
         private PlayerType _ownerType;
         private Transform _owner;
         private CancellationToken _token;
@@ -30,6 +31,7 @@ namespace Two.InGame.Presentation.View
 
         private void Awake()
         {
+            _initPosition = transform.position;
             _ownerType = PlayerType.None;
             _owner = null;
             _token = this.GetCancellationTokenOnDestroy();
@@ -53,6 +55,16 @@ namespace Two.InGame.Presentation.View
                     var velocity = _rigidbody.velocity;
                     _photonTransformViewClassic.SetSynchronizedValues(velocity, 0);
                 })
+                .AddTo(this);
+
+            // ステージ外に出た場合、初期位置に
+            this.UpdateAsObservable()
+                .Where(_ => _photonView.IsMine)
+                .Select(_ => transform.position)
+                .Where(position =>
+                    position.x < -11.0f || position.x > 11.0f ||
+                    position.z < -11.0f || position.z > 11.0f)
+                .Subscribe(_ => transform.position = _initPosition)
                 .AddTo(this);
         }
 
