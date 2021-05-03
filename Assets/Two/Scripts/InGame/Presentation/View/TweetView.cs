@@ -10,24 +10,19 @@ namespace Two.InGame.Presentation.View
     [RequireComponent(typeof(Button))]
     public sealed class TweetView : MonoBehaviour
     {
-        private IMatchingUseCase _matchingUseCase;
+        private ITweetUseCase _tweetUseCase;
 
         [Inject]
-        private void Construct(IMatchingUseCase matchingUseCase)
+        private void Construct(ITweetUseCase tweetUseCase)
         {
-            _matchingUseCase = matchingUseCase;
+            _tweetUseCase = tweetUseCase;
         }
 
         private void Start()
         {
             GetComponent<Button>()
                 .OnClickAsObservable()
-                .Subscribe(_ =>
-                {
-                    var tweetText = $"{_matchingUseCase.GetTweetText()}\n";
-                    tweetText += $"#{GameConfig.HASH_TAG1} #{GameConfig.HASH_TAG2} #{GameConfig.GAME_ID}\n";
-                    UnityRoomTweet.Tweet(GameConfig.GAME_ID, tweetText);
-                })
+                .Subscribe(_ => UnityRoomTweet.Tweet(GameConfig.GAME_ID, _tweetUseCase.GetTweetText()))
                 .AddTo(this);
         }
     }

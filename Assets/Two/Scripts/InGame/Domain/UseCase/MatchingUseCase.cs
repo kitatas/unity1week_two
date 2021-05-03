@@ -1,10 +1,11 @@
+using Two.Common.Application;
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.UseCase.Interface;
 
 namespace Two.InGame.Domain.UseCase
 {
-    public sealed class MatchingUseCase : IMatchingUseCase
+    public sealed class MatchingUseCase : IMatchingUseCase, ITweetUseCase
     {
         private PlayerType _winner;
         private readonly IMatchingEntity _matchingEntity;
@@ -50,17 +51,27 @@ namespace Two.InGame.Domain.UseCase
 
         public string GetTweetText()
         {
-            if (GetWinnerName() == GetPlayerName())
+            return GetTweetMainText() + GetHashTag();
+        }
+
+        private string GetTweetMainText()
+        {
+            if (_winner == GetPlayerType())
             {
-                return $"{GetEnemyName()}さんに勝利した！";
+                return $"{GetEnemyName()}さんに勝利した！\n";
             }
 
-            if (GetWinnerName() == GetEnemyName())
+            if (_winner == GetEnemyType())
             {
-                return $"{GetEnemyName()}さんに敗北した...";
+                return $"{GetEnemyName()}さんに敗北した...\n";
             }
 
             return "";
+        }
+
+        private static string GetHashTag()
+        {
+            return $"#{GameConfig.HASH_TAG1} #{GameConfig.HASH_TAG2} #{GameConfig.GAME_ID}\n";
         }
     }
 }
