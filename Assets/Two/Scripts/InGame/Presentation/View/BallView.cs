@@ -70,7 +70,7 @@ namespace Two.InGame.Presentation.View
 
         public PlayerType GetOwnerType() => _ownerType;
 
-        public void SetOwner(Transform owner, PlayerType playerType)
+        public void PickUp(Transform owner, PlayerType playerType)
         {
             _owner = owner;
             _ownerType = playerType;

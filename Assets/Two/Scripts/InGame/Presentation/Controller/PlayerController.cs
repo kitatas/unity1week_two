@@ -118,7 +118,7 @@ namespace Two.InGame.Presentation.Controller
                     }
 
                     // 取得
-                    other.SetOwner(transform, _playerType);
+                    other.PickUp(transform, _playerType);
                     _ballStockUseCase.Push(other);
                 })
                 .AddTo(this);
@@ -133,7 +133,7 @@ namespace Two.InGame.Presentation.Controller
             ballView?.Shot();
         }
 
-        public void SetName()
+        public void InitPlayerInfo()
         {
             if (photonView.IsMine)
             {

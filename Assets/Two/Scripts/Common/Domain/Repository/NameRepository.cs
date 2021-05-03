@@ -1,5 +1,5 @@
+using Two.Common.Application;
 using Two.Common.Domain.Repository.Interface;
-using Two.InGame.Application;
 using UnityEngine;
 
 namespace Two.Common.Domain.Repository
@@ -10,7 +10,7 @@ namespace Two.Common.Domain.Repository
         {
             return PlayerPrefs.HasKey(SaveKey.PLAYER_NAME)
                 ? PlayerPrefs.GetString(SaveKey.PLAYER_NAME)
-                : PlayerParam.DEFAULT_NAME;
+                : GameConfig.DEFAULT_NAME;
         }
 
         public void Save(string name)

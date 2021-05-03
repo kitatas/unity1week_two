@@ -83,7 +83,7 @@ namespace Two.InGame.Presentation.View.State
             var players = FindObjectsOfType<PlayerController>();
             foreach (var player in players)
             {
-                player.SetName();
+                player.InitPlayerInfo();
             }
         }
 
