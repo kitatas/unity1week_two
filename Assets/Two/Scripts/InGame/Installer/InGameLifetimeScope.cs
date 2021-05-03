@@ -1,10 +1,7 @@
 using Two.Common.Installer;
 using Two.InGame.Data.Entity;
-using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.Model;
-using Two.InGame.Domain.Model.Interface;
 using Two.InGame.Domain.UseCase;
-using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Factory;
 using Two.InGame.Presentation.Controller;
 using Two.InGame.Presentation.Presenter;
@@ -33,25 +30,25 @@ namespace Two.InGame.Installer
 
             #region Entity
 
-            builder.Register<IGameStateEntity, GameStateEntity>(Lifetime.Singleton);
-            builder.Register<IMatchingEntity, MatchingEntity>(Lifetime.Singleton);
-            builder.Register<IMatchingStateEntity, MatchingStateEntity>(Lifetime.Singleton);
+            builder.Register<GameStateEntity>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MatchingEntity>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MatchingStateEntity>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 
             #region Model
 
-            builder.Register<IGameStateModel, GameStateModel>(Lifetime.Singleton);
-            builder.Register<IMatchingStateModel, MatchingStateModel>(Lifetime.Singleton);
+            builder.Register<GameStateModel>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MatchingStateModel>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 
             #region UseCase
 
-            builder.Register<IConnectUseCase, ConnectUseCase>(Lifetime.Singleton);
-            builder.Register<IGameStateUseCase, GameStateUseCase>(Lifetime.Singleton);
-            builder.Register<IMatchingStateUseCase, MatchingStateUseCase>(Lifetime.Singleton);
-            builder.Register<IMatchingUseCase, MatchingUseCase>(Lifetime.Singleton);
+            builder.Register<ConnectUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<GameStateUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MatchingStateUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MatchingUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 

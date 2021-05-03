@@ -1,6 +1,5 @@
 using Two.Common.Installer;
 using Two.OutGame.Domain.UseCase;
-using Two.OutGame.Domain.UseCase.Interface;
 using VContainer;
 
 namespace Two.OutGame.Installer
@@ -13,7 +12,7 @@ namespace Two.OutGame.Installer
 
             #region UseCase
 
-            builder.Register<INameRegisterUseCase, NameRegisterUseCase>(Lifetime.Singleton);
+            builder.Register<NameRegisterUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
         }

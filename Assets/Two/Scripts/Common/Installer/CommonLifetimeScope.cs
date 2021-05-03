@@ -1,6 +1,5 @@
 using Two.Common.Data.DataStore;
 using Two.Common.Domain.Repository;
-using Two.Common.Domain.Repository.Interface;
 using Two.Common.Domain.UseCase;
 using Two.Common.Presentation.Controller;
 using Two.Common.Presentation.Controller.Sound;
@@ -26,15 +25,14 @@ namespace Two.Common.Installer
 
             #region Repository
 
-            builder.Register<INameRepository, NameRepository>(Lifetime.Singleton);
-            builder.Register<ISoundRepository, SoundRepository>(Lifetime.Singleton);
+            builder.Register<NameRepository>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SoundRepository>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 
             #region UseCase
 
-            builder.Register<SoundUseCase>(Lifetime.Singleton)
-                .AsImplementedInterfaces();
+            builder.Register<SoundUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 

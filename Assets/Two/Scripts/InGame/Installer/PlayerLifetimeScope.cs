@@ -1,9 +1,6 @@
 using Two.InGame.Data.Entity;
-using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.Model;
-using Two.InGame.Domain.Model.Interface;
 using Two.InGame.Domain.UseCase;
-using Two.InGame.Domain.UseCase.Interface;
 using Two.InGame.Presentation.Presenter;
 using Two.InGame.Presentation.View;
 using UnityEngine;
@@ -29,25 +26,25 @@ namespace Two.InGame.Installer
 
             #region Entity
 
-            builder.Register<IBallStockEntity, BallStockEntity>(Lifetime.Scoped);
-            builder.Register<IHpEntity, HpEntity>(Lifetime.Scoped);
+            builder.Register<BallStockEntity>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<HpEntity>(Lifetime.Scoped).AsImplementedInterfaces();
 
             #endregion
 
             #region Model
 
-            builder.Register<IBallStockModel, BallStockModel>(Lifetime.Scoped);
-            builder.Register<IHpModel, HpModel>(Lifetime.Scoped);
+            builder.Register<BallStockModel>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<HpModel>(Lifetime.Scoped).AsImplementedInterfaces();
 
             #endregion
 
             #region UseCase
 
-            builder.Register<IInputProvider, KeyboardInputProvider>(Lifetime.Scoped);
-            builder.Register<IMovementUseCase, MovementUseCase>(Lifetime.Scoped);
-            builder.Register<IBallStockUseCase, BallStockUseCase>(Lifetime.Scoped);
-            builder.Register<IRotationUseCase, RotationUseCase>(Lifetime.Scoped);
-            builder.Register<IHpUseCase, HpUseCase>(Lifetime.Scoped);
+            builder.Register<KeyboardInputProvider>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<MovementUseCase>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<BallStockUseCase>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<RotationUseCase>(Lifetime.Scoped).AsImplementedInterfaces();
+            builder.Register<HpUseCase>(Lifetime.Scoped).AsImplementedInterfaces();
 
             #endregion
 
