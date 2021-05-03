@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Factory;
 using Two.InGame.Presentation.Controller;
 using UnityEngine;
 using VContainer;
@@ -11,17 +12,17 @@ namespace Two.InGame.Presentation.View.State
 {
     public sealed class MatchingView : BaseState
     {
-        private PlayerGenerator _playerGenerator;
+        private PunObjectFactory _punObjectFactory;
         private IMatchingStateUseCase _matchingStateUseCase;
         private IGameStateUseCase _gameStateUseCase;
         private IConnectUseCase _connectUseCase;
         private MatchingUserView _matchingUserView;
 
         [Inject]
-        private void Construct(PlayerGenerator playerGenerator, IMatchingStateUseCase matchingStateUseCase,
+        private void Construct(PunObjectFactory punObjectFactory, IMatchingStateUseCase matchingStateUseCase,
             IGameStateUseCase gameStateUseCase, IConnectUseCase connectUseCase, MatchingUserView matchingUserView)
         {
-            _playerGenerator = playerGenerator;
+            _punObjectFactory = punObjectFactory;
             _matchingStateUseCase = matchingStateUseCase;
             _gameStateUseCase = gameStateUseCase;
             _connectUseCase = connectUseCase;
@@ -51,7 +52,7 @@ namespace Two.InGame.Presentation.View.State
                 _matchingStateUseCase.SetState(MatchingState.Matching);
                 var playerType = await _connectUseCase.MatchingAsync(token);
 
-                _playerGenerator.Generate(playerType);
+                _punObjectFactory.Generate(playerType);
 
                 _matchingStateUseCase.SetState(MatchingState.Matched);
                 await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken: token);

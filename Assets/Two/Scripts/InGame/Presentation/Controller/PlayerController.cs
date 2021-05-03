@@ -3,6 +3,7 @@ using Photon.Pun;
 using Two.Common.Application;
 using Two.InGame.Application;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Factory;
 using Two.InGame.Presentation.View;
 using Two.InGame.Presentation.View.Interface;
 using UniRx;
@@ -19,7 +20,6 @@ namespace Two.InGame.Presentation.Controller
         [SerializeField] private PhotonTransformViewClassic photonTransformViewClassic = default;
         [SerializeField] private NameView nameView = default;
         [SerializeField] private Canvas canvas = default;
-        [SerializeField] private GameObject deadEffect = default;
         private PlayerType _playerType;
         private PlayerType _enemyType;
 
@@ -31,11 +31,12 @@ namespace Two.InGame.Presentation.Controller
         private IHpUseCase _hpUseCase;
         private IGameStateUseCase _gameStateUseCase;
         private IMatchingUseCase _matchingUseCase;
+        private LocalObjectFactory _localObjectFactory;
 
         [Inject]
         public void Construct(Camera mainCamera, IInputProvider inputProvider, IMovementUseCase movementUseCase,
             IRotationUseCase rotationUseCase, IBallStockUseCase ballStockUseCase, IHpUseCase hpUseCase,
-            IGameStateUseCase gameStateUseCase, IMatchingUseCase matchingUseCase)
+            IGameStateUseCase gameStateUseCase, IMatchingUseCase matchingUseCase, LocalObjectFactory localObjectFactory)
         {
             _mainCamera = mainCamera;
             _inputProvider = inputProvider;
@@ -45,6 +46,7 @@ namespace Two.InGame.Presentation.Controller
             _hpUseCase = hpUseCase;
             _gameStateUseCase = gameStateUseCase;
             _matchingUseCase = matchingUseCase;
+            _localObjectFactory = localObjectFactory;
         }
 
         private void Start()
@@ -149,7 +151,7 @@ namespace Two.InGame.Presentation.Controller
 
         private void DestroyPlayer()
         {
-            Instantiate(deadEffect, transform.position, Quaternion.identity);
+            _localObjectFactory.GenerateDeadEffect(transform.position);
 
             var balls = FindObjectsOfType<BallView>();
             foreach (var ball in balls)

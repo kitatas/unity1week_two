@@ -5,6 +5,7 @@ using Two.InGame.Domain.Model;
 using Two.InGame.Domain.Model.Interface;
 using Two.InGame.Domain.UseCase;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.InGame.Factory;
 using Two.InGame.Presentation.Controller;
 using Two.InGame.Presentation.Presenter;
 using Two.InGame.Presentation.View;
@@ -23,7 +24,8 @@ namespace Two.InGame.Installer
         [SerializeField] private ResultView resultView = default;
         [SerializeField] private MatchingStateView matchingStateView = default;
         [SerializeField] private MatchingUserView matchingUserView = default;
-        [SerializeField] private PlayerGenerator playerGenerator = default;
+        [SerializeField] private PunObjectFactory punObjectFactory = default;
+        [SerializeField] private LocalObjectFactory localObjectFactory = default;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -73,7 +75,13 @@ namespace Two.InGame.Installer
             #region Controller
 
             builder.RegisterEntryPoint<StateSequencer>(Lifetime.Singleton);
-            builder.RegisterInstance<PlayerGenerator>(playerGenerator);
+
+            #endregion
+
+            #region Factory
+
+            builder.RegisterInstance<PunObjectFactory>(punObjectFactory);
+            builder.RegisterInstance<LocalObjectFactory>(localObjectFactory);
 
             #endregion
         }
