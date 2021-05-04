@@ -18,6 +18,8 @@ namespace Two.InGame.Presentation.View
         [SerializeField] private RectTransform rightSide = default;
         [SerializeField] private TextMeshProUGUI masterName = default;
         [SerializeField] private TextMeshProUGUI clientName = default;
+        [SerializeField] private TextMeshProUGUI masterRate = default;
+        [SerializeField] private TextMeshProUGUI clientRate = default;
 
         private IMatchingUseCase _matchingUseCase;
         private SeController _seController;
@@ -33,12 +35,16 @@ namespace Two.InGame.Presentation.View
         {
             masterName.text = "";
             clientName.text = "";
+            masterRate.text = "";
+            clientRate.text = "";
         }
 
         public async UniTask ShowPlayerNameAsync(CancellationToken token)
         {
             masterName.text = _matchingUseCase.GetUserName(PlayerType.Master);
             clientName.text = _matchingUseCase.GetUserName(PlayerType.Client);
+            masterRate.text = $"{_matchingUseCase.GetUserRate(PlayerType.Master)}";
+            clientRate.text = $"{_matchingUseCase.GetUserRate(PlayerType.Client)}";
 
             await (
                 leftSide
@@ -53,7 +59,7 @@ namespace Two.InGame.Presentation.View
 
             _seController.Play(SeType.Matched);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken: token);
         }
 
         public async UniTask HidePlayerNameAsync(CancellationToken token)

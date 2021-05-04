@@ -2,6 +2,7 @@ using Two.Common.Application;
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.UseCase.Interface;
+using UnityEngine;
 
 namespace Two.InGame.Domain.UseCase
 {
@@ -24,6 +25,10 @@ namespace Two.InGame.Domain.UseCase
 
         public string GetEnemyName() => _matchingEntity.GetEnemyName();
 
+        public int GetPlayerRate() => _matchingEntity.GetPlayerRate();
+
+        public int GetEnemyRate() => _matchingEntity.GetEnemyRate();
+
         public void SetWinner(PlayerType type)
         {
             _winner = type;
@@ -44,9 +49,38 @@ namespace Two.InGame.Domain.UseCase
             return $"{PlayerType.None}";
         }
 
+        public int GetUserRate(PlayerType type)
+        {
+            if (type == GetPlayerType())
+            {
+                return GetPlayerRate();
+            }
+
+            if (type == GetEnemyType())
+            {
+                return GetEnemyRate();
+            }
+
+            return GameConfig.DEFAULT_RATE;
+        }
+
         public string GetWinnerName()
         {
             return GetUserName(_winner);
+        }
+
+        public bool IsWin() => _winner == GetPlayerType();
+
+        public int GetAddRateValue()
+        {
+            if (IsWin())
+            {
+                return (int) (GameParam.UPDATE_RATE_VALUE + (GetEnemyRate() - GetPlayerRate()) * 0.04f);
+            }
+            else
+            {
+                return (int) (GameParam.UPDATE_RATE_VALUE + (GetPlayerRate() - GetEnemyRate()) * 0.04f) * -1;
+            }
         }
 
         public string GetTweetText()

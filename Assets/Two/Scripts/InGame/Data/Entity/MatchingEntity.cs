@@ -9,11 +9,19 @@ namespace Two.InGame.Data.Entity
         private string _enemyName;
         private PlayerType _playerType;
         private PlayerType _enemyType;
+        private int _playerRate;
+        private int _enemyRate;
 
-        public void SetMatchingUserName(string player, string enemy)
+        public void SetPlayerData(string playerName, int playerRate)
         {
-            _playerName = player;
-            _enemyName = enemy;
+            _playerName = playerName;
+            _playerRate = playerRate;
+        }
+        
+        public void SetEnemyData(string enemyName, int enemyRate)
+        {
+            _enemyName = enemyName;
+            _enemyRate = enemyRate;
         }
 
         public void SetMatchingUserType(PlayerType player, PlayerType enemy)
@@ -29,5 +37,9 @@ namespace Two.InGame.Data.Entity
         public PlayerType GetPlayerType() => _playerType;
 
         public PlayerType GetEnemyType() => _enemyType;
+
+        public int GetPlayerRate() => _playerRate;
+
+        public int GetEnemyRate() => _enemyRate;
     }
 }

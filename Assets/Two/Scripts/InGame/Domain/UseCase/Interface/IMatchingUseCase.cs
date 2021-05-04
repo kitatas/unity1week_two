@@ -8,8 +8,13 @@ namespace Two.InGame.Domain.UseCase.Interface
         PlayerType GetEnemyType();
         string GetPlayerName();
         string GetEnemyName();
+        int GetPlayerRate();
+        int GetEnemyRate();
         void SetWinner(PlayerType type);
         string GetUserName(PlayerType type);
+        int GetUserRate(PlayerType type);
         string GetWinnerName();
+        bool IsWin();
+        int GetAddRateValue();
     }
 }

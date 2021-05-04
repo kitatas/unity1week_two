@@ -4,10 +4,13 @@ using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using Photon.Realtime;
 using Pun2Task;
+using Two.Common.Application;
 using Two.Common.Domain.Repository.Interface;
 using Two.InGame.Application;
 using Two.InGame.Data.Entity.Interface;
 using Two.InGame.Domain.UseCase.Interface;
+using Two.Utility;
+using UnityEngine;
 
 namespace Two.InGame.Domain.UseCase
 {
@@ -30,7 +33,12 @@ namespace Two.InGame.Domain.UseCase
 
             await Pun2TaskCallback.OnJoinedRoomAsync();
 
-            PhotonNetwork.LocalPlayer.NickName = _playerDataRepository.LoadName();
+            var hashTable = new ExitGames.Client.Photon.Hashtable
+            {
+                {SaveKey.PLAYER_NAME, _playerDataRepository.LoadName()},
+                {SaveKey.PLAYER_RATE, _playerDataRepository.LoadRate()}
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hashTable);
         }
 
         private static async UniTaskVoid JoinRandomRoomAsync(CancellationToken token)
@@ -59,13 +67,22 @@ namespace Two.InGame.Domain.UseCase
             PhotonNetwork.CurrentRoom.IsOpen = false;
             await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
 
-            var playerName = _playerDataRepository.LoadName();
-            var enemyName = PhotonNetwork.PlayerListOthers[0].NickName;
-            _matchingEntity.SetMatchingUserName(playerName, enemyName);
+            foreach (var player in PhotonNetwork.CurrentRoom.Players)
+            {
+                if (player.Value.UserId == PhotonNetwork.LocalPlayer.UserId)
+                {
+                    _matchingEntity.SetPlayerData(player.Value.GetName(), player.Value.GetRate());
+                }
+                else
+                {
+                    _matchingEntity.SetEnemyData(player.Value.GetName(), player.Value.GetRate());
+                }
+            }
 
             var playerType = PhotonNetwork.IsMasterClient ? PlayerType.Master : PlayerType.Client;
             var enemyType = PhotonNetwork.IsMasterClient ? PlayerType.Client : PlayerType.Master;
             _matchingEntity.SetMatchingUserType(playerType, enemyType);
+
             return playerType;
         }
 

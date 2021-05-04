@@ -155,27 +155,5 @@ namespace Two.OutGame.Domain.UseCase
 
             _ncmbRepository.objectId = ncmbObject.ObjectId;
         }
-
-        public async UniTask SendScoreAsync(int rate, CancellationToken token)
-        {
-            var ncmbObject = await LoadSelfDataAsync(token);
-            ncmbObject[Ncmb.COLUMN_SCORE] = rate;
-            var score = BuildScore($"{ncmbObject[Ncmb.COLUMN_SCORE]}");
-            _playerDataRepository.SaveRate((int) score.value);
-
-            NCMBException exception = null;
-            await ncmbObject.YieldableSaveAsync(error => exception = error).ToUniTask(cancellationToken: token);
-
-            if (exception != null)
-            {
-                // NCMBのコンソールから直接削除した場合に、該当のobjectIdが無いので発生する（らしい）
-                ncmbObject.ObjectId = null;
-
-                // 新規として送信
-                await ncmbObject.YieldableSaveAsync(error => exception = error).ToUniTask(cancellationToken: token);
-            }
-
-            _ncmbRepository.objectId = ncmbObject.ObjectId;
-        }
     }
 }

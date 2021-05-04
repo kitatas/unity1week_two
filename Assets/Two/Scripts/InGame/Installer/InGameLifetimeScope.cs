@@ -49,6 +49,7 @@ namespace Two.InGame.Installer
             builder.Register<GameStateUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<MatchingStateUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<MatchingUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<RatingUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 
