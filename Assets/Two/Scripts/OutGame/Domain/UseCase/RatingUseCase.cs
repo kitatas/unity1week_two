@@ -6,8 +6,6 @@ using NCMB;
 using NCMB.Extensions;
 using Two.Common.Application;
 using Two.Common.Domain.Repository.Interface;
-using Two.OutGame.Application;
-using Two.OutGame.Domain.Repository.Interface;
 using Two.OutGame.Domain.UseCase.Interface;
 using Two.OutGame.Factory;
 using UnityEngine;

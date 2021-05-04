@@ -8,6 +8,7 @@ namespace Two.InGame.Application
 
     public sealed class GameParam
     {
+        public const int UPDATE_RATE_VALUE = 16;
         public const GameState INIT_GAME_STATE = GameState.Matching;
         public const MatchingState INIT_MATCHING_STATE = MatchingState.None;
     }

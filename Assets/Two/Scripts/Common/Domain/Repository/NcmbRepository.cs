@@ -1,8 +1,8 @@
 using Two.Common.Application;
-using Two.OutGame.Domain.Repository.Interface;
+using Two.Common.Domain.Repository.Interface;
 using UnityEngine;
 
-namespace Two.OutGame.Domain.Repository
+namespace Two.Common.Domain.Repository
 {
     public sealed class NcmbRepository : INcmbRepository
     {

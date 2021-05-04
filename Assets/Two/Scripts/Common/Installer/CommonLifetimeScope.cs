@@ -13,6 +13,7 @@ namespace Two.Common.Installer
     {
         [SerializeField] private BgmTable bgmTable = default;
         [SerializeField] private SeTable seTable = default;
+        [SerializeField] private RankingInfo rankingInfo = default;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -20,6 +21,7 @@ namespace Two.Common.Installer
 
             builder.RegisterInstance<BgmTable>(bgmTable);
             builder.RegisterInstance<SeTable>(seTable);
+            builder.RegisterInstance<RankingInfo>(rankingInfo);
 
             #endregion
 
@@ -27,6 +29,8 @@ namespace Two.Common.Installer
 
             builder.Register<PlayerDataRepository>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SoundRepository>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<RankingInfoRepository>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<NcmbRepository>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 

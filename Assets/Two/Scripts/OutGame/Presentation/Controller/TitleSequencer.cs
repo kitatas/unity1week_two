@@ -2,7 +2,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Two.Common.Application;
 using Two.Common.Presentation.Controller.Sound;
-using Two.OutGame.Application;
 using Two.OutGame.Domain.UseCase.Interface;
 using Two.OutGame.Presentation.View;
 using UniRx;

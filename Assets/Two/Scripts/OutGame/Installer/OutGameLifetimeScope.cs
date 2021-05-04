@@ -1,5 +1,4 @@
 using Two.Common.Installer;
-using Two.OutGame.Domain.Repository;
 using Two.OutGame.Domain.UseCase;
 using Two.OutGame.Factory;
 using UnityEngine;
@@ -10,7 +9,6 @@ namespace Two.OutGame.Installer
     public sealed class OutGameLifetimeScope : CommonLifetimeScope
     {
         [SerializeField] private RectTransform scrollViewContent = default;
-        [SerializeField] private RankingInfo rankingInfo = default;
         [SerializeField] private RatingFactory ratingFactory = default;
 
         protected override void Configure(IContainerBuilder builder)
@@ -20,19 +18,6 @@ namespace Two.OutGame.Installer
             #region Component
 
             builder.RegisterInstance<RectTransform>(scrollViewContent);
-
-            #endregion
-
-            #region DataStore
-
-            builder.RegisterInstance<RankingInfo>(rankingInfo);
-
-            #endregion
-
-            #region Repository
-
-            builder.Register<RankingInfoRepository>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<NcmbRepository>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion
 

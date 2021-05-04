@@ -1,6 +1,6 @@
-using Two.OutGame.Domain.Repository.Interface;
+using Two.Common.Domain.Repository.Interface;
 
-namespace Two.OutGame.Domain.Repository
+namespace Two.Common.Domain.Repository
 {
     public sealed class RankingInfoRepository : IRankingInfoRepository
     {
