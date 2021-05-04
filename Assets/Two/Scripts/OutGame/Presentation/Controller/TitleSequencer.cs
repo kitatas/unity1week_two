@@ -6,12 +6,14 @@ using Two.OutGame.Domain.UseCase.Interface;
 using Two.OutGame.Presentation.View;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using VContainer;
 
 namespace Two.OutGame.Presentation.Controller
 {
     public sealed class TitleSequencer : MonoBehaviour
     {
+        [SerializeField] private Image loadingImage = default;
         [SerializeField] private RatingView ratingView = default;
         [SerializeField] private NameRegisterView nameRegisterView = default;
 
@@ -42,7 +44,6 @@ namespace Two.OutGame.Presentation.Controller
 
             nameRegisterView
                 .RegisterAsObservable()
-                .Where(_ => _currentPlayerName != nameRegisterView.GetInputName())
                 .Subscribe(_ =>
                 {
                     var inputName = nameRegisterView.GetInputName();
@@ -51,11 +52,10 @@ namespace Two.OutGame.Presentation.Controller
                     if (string.IsNullOrWhiteSpace(inputName) ||
                         _currentPlayerName == inputName)
                     {
-                        _seController.Play(ButtonType.Cancel);
+                        nameRegisterView.Registered();
                     }
                     else
                     {
-                        _seController.Play(ButtonType.Decision);
                         RegisterNameAsync(inputName, token).Forget();
                     }
                 })
@@ -72,13 +72,21 @@ namespace Two.OutGame.Presentation.Controller
 
             nameRegisterView.SetName(_currentPlayerName);
             ratingView.SetPlayerInfo(_currentPlayerName, _currentPlayerRate);
+
+            loadingImage.gameObject.SetActive(false);
         }
 
         private async UniTask RegisterNameAsync(string newPlayerName, CancellationToken token)
         {
+            _seController.Play(SeType.Decision);
+            nameRegisterView.Registering();
+
             await _ratingUseCase.SendNameAsync(newPlayerName, token);
 
             await InitAsync(token);
+
+            _seController.Play(SeType.Decision);
+            nameRegisterView.Registered();
         }
     }
 }
