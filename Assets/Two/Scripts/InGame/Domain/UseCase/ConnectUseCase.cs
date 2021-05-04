@@ -14,12 +14,12 @@ namespace Two.InGame.Domain.UseCase
     public sealed class ConnectUseCase : IConnectUseCase
     {
         private readonly IMatchingEntity _matchingEntity;
-        private readonly INameRepository _nameRepository;
+        private readonly IPlayerDataRepository _playerDataRepository;
 
-        public ConnectUseCase(IMatchingEntity matchingEntity, INameRepository nameRepository)
+        public ConnectUseCase(IMatchingEntity matchingEntity, IPlayerDataRepository playerDataRepository)
         {
             _matchingEntity = matchingEntity;
-            _nameRepository = nameRepository;
+            _playerDataRepository = playerDataRepository;
         }
 
         public async UniTask JoinRoomAsync(CancellationToken token)
@@ -30,7 +30,7 @@ namespace Two.InGame.Domain.UseCase
 
             await Pun2TaskCallback.OnJoinedRoomAsync();
 
-            PhotonNetwork.LocalPlayer.NickName = _nameRepository.Load();
+            PhotonNetwork.LocalPlayer.NickName = _playerDataRepository.LoadName();
         }
 
         private static async UniTaskVoid JoinRandomRoomAsync(CancellationToken token)
@@ -59,7 +59,7 @@ namespace Two.InGame.Domain.UseCase
             PhotonNetwork.CurrentRoom.IsOpen = false;
             await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: token);
 
-            var playerName = _nameRepository.Load();
+            var playerName = _playerDataRepository.LoadName();
             var enemyName = PhotonNetwork.PlayerListOthers[0].NickName;
             _matchingEntity.SetMatchingUserName(playerName, enemyName);
 

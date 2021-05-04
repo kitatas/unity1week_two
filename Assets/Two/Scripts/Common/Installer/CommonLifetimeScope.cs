@@ -25,7 +25,7 @@ namespace Two.Common.Installer
 
             #region Repository
 
-            builder.Register<NameRepository>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<PlayerDataRepository>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SoundRepository>(Lifetime.Singleton).AsImplementedInterfaces();
 
             #endregion

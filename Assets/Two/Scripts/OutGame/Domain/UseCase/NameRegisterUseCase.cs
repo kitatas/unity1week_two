@@ -5,15 +5,15 @@ namespace Two.OutGame.Domain.UseCase
 {
     public sealed class NameRegisterUseCase : INameRegisterUseCase
     {
-        private readonly INameRepository _nameRepository;
+        private readonly IPlayerDataRepository _playerDataRepository;
 
-        public NameRegisterUseCase(INameRepository nameRepository)
+        public NameRegisterUseCase(IPlayerDataRepository playerDataRepository)
         {
-            _nameRepository = nameRepository;
+            _playerDataRepository = playerDataRepository;
         }
 
-        public string LoadName() => _nameRepository.Load();
+        public string LoadName() => _playerDataRepository.LoadName();
 
-        public void SaveName(string name) => _nameRepository.Save(name);
+        public void SaveName(string name) => _playerDataRepository.SaveName(name);
     }
 }

@@ -9,6 +9,7 @@ namespace Two.Common.Application
     public sealed class GameConfig
     {
         public const string DEFAULT_NAME = "no name";
+        public const int DEFAULT_RATE = 1500;
 
         public const string GAME_ID = "dodzwei";
         public const string HASH_TAG1 = "unityroom";
@@ -18,5 +19,7 @@ namespace Two.Common.Application
     public sealed class SaveKey
     {
         public const string PLAYER_NAME = "PlayerName";
+        public const string PLAYER_RATE = "PlayerRate";
+        public const string OBJECT_ID = "ObjectId";
     }
 }
