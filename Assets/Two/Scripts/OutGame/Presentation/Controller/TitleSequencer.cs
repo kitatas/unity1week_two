@@ -13,7 +13,8 @@ namespace Two.OutGame.Presentation.Controller
 {
     public sealed class TitleSequencer : MonoBehaviour
     {
-        [SerializeField] private Image loadingImage = default;
+        [SerializeField] private LoadingView loadingView = default;
+        [SerializeField] private TitleNameView titleNameView = default;
         [SerializeField] private RatingView ratingView = default;
         [SerializeField] private NameRegisterView nameRegisterView = default;
 
@@ -41,6 +42,9 @@ namespace Two.OutGame.Presentation.Controller
         {
             var token = this.GetCancellationTokenOnDestroy();
             InitAsync(token).Forget();
+
+            loadingView.Init();
+            titleNameView.Init();
 
             nameRegisterView
                 .RegisterAsObservable()
@@ -73,12 +77,11 @@ namespace Two.OutGame.Presentation.Controller
             nameRegisterView.SetName(_currentPlayerName);
             ratingView.SetPlayerInfo(_currentPlayerName, _currentPlayerRate);
 
-            loadingImage.gameObject.SetActive(false);
+            loadingView.Activate(false);
         }
 
         private async UniTask RegisterNameAsync(string newPlayerName, CancellationToken token)
         {
-            _seController.Play(SeType.Decision);
             nameRegisterView.Registering();
 
             await _ratingUseCase.SendNameAsync(newPlayerName, token);
